@@ -1,15 +1,16 @@
-plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
-}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.xiazunyang'
+version = '1.0.0'
 
 android {
-    compileSdk 32
+    compileSdkVersion 30
 
     defaultConfig {
-        minSdk 21
-        targetSdk 32
+        minSdkVersion 21
+        targetSdkVersion 30
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -27,17 +28,5 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-    }
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                groupId = 'cn.numeron'
-                artifactId = 'uistate'
-                version = '1.0.0'
-            }
-        }
     }
 }
