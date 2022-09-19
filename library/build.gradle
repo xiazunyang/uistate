@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'com.github.xiazunyang'
-version = '1.0.0'
+//group = 'com.github.xiazunyang'
+//version = '1.0.0'
 
 android {
     compileSdkVersion 30
