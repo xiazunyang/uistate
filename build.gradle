@@ -1,12 +1,12 @@
 buildscript {
     repositories {
         google()
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.2"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
@@ -14,8 +14,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        mavenCentral()
     }
 }
 
