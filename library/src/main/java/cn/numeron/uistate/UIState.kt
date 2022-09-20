@@ -25,7 +25,7 @@ sealed class UIState<T>(open val value: T?) {
     /** 将当前状态转换为失败状态 */
     fun toFailure(
         cause: Throwable,
-        message: String = failureMessageHandler.getMessage(cause)
+        message: String = failureMessageHandler.getFailureMessage(cause)
     ): UIState<T> {
         return Failure(cause, message, value)
     }
@@ -38,12 +38,7 @@ sealed class UIState<T>(open val value: T?) {
         return Loading(progress, message, value)
     }
 
-    /** 将当前状态转换为空状态 */
-    fun toEmpty(message: String = emptyMessage): UIState<T> {
-        return Empty(message, value)
-    }
-
-    companion object {
+    companion object : FailureMessageHandler {
 
         /** 加载状态下的提示消息 */
         lateinit var loadingMessage: String
@@ -54,18 +49,7 @@ sealed class UIState<T>(open val value: T?) {
             private set
 
         /** 错误状态下提示消息的处理器 */
-        var failureMessageHandler = FailureMessageHandler.DEFAULT
-            private set
-
-        /** 创建一个空状态的[UIState] */
-        operator fun <T> invoke(): UIState<T> {
-            return Empty(emptyMessage, null)
-        }
-
-        /** 创建一个成功状态的[UIState] */
-        operator fun <T> invoke(value: T): UIState<T> {
-            return Success(value)
-        }
+        private var failureMessageHandler = FailureMessageHandler.DEFAULT
 
         /** 从[Context]中初始化 */
         fun init(
@@ -74,7 +58,7 @@ sealed class UIState<T>(open val value: T?) {
         ) {
             emptyMessage = context.getString(R.string.mvi_empty_message)
             loadingMessage = context.getString(R.string.mvi_loading_message)
-            this. failureMessageHandler = if (context is FailureMessageHandler) context else failureMessageHandler
+            this.failureMessageHandler = if (context is FailureMessageHandler) context else failureMessageHandler
         }
 
         /** 自定义初始化 */
@@ -86,6 +70,20 @@ sealed class UIState<T>(open val value: T?) {
             this.emptyMessage = emptyMessage
             this.loadingMessage = loadingMessage
             this.failureMessageHandler = failureMessageHandler
+        }
+
+        override fun getFailureMessage(throwable: Throwable): String {
+            return failureMessageHandler.getFailureMessage(throwable)
+        }
+
+        /** 创建一个空状态的[UIState] */
+        operator fun <T> invoke(): UIState<T> {
+            return Empty(emptyMessage, null)
+        }
+
+        /** 创建一个成功状态的[UIState] */
+        operator fun <T> invoke(value: T): UIState<T> {
+            return Success(value)
         }
 
     }
