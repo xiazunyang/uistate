@@ -4,28 +4,20 @@ import android.content.Context
 
 sealed class UIState<T>(open val value: T?) {
 
-    /** 判断是否有值，不论它是什么状态 */
-    val hasValue: Boolean
-        get() {
-            val value = value
-            if (value is Iterable<*>) {
-                return value.any()
-            }
-            if (value is Iterator<*>) {
-                return value.hasNext()
-            }
-            return value != null
-        }
-
     /** 将当前状态转换为成功状态 */
     fun toSuccess(value: T): UIState<T> {
         return Success(value)
     }
 
+    /** 将当前状态转换为成功状态 */
+    fun toEmpty(message: String = emptyMessage): UIState<T> {
+        return Empty(message, value)
+    }
+
     /** 将当前状态转换为失败状态 */
     fun toFailure(
         cause: Throwable,
-        message: String = failureMessageHandler.getFailureMessage(cause)
+        message: String = getFailureMessage(cause)
     ): UIState<T> {
         return Failure(cause, message, value)
     }
@@ -36,6 +28,21 @@ sealed class UIState<T>(open val value: T?) {
         message: String = loadingMessage
     ): UIState<T> {
         return Loading(progress, message, value)
+    }
+
+    /**
+     * 将当前状态的值转换成相同状态下的另一个类型的[UIState]
+     * 注意，如果[mapper]返回null，则[Success]状态会坍缩为[Empty]状态。
+     */
+    fun <R> map(mapper: (T?) -> R?): UIState<R> {
+        val mapped = mapper(value)
+        return when (this) {
+            is Empty -> Empty(message, mapped)
+            is Failure -> Failure(cause, message, mapped)
+            is Loading -> Loading(progress, message, mapped)
+            is Success -> Success(mapped ?: return Empty(emptyMessage, null))
+            else -> throw IllegalStateException()
+        }
     }
 
     companion object : FailureMessageHandler {
@@ -49,7 +56,7 @@ sealed class UIState<T>(open val value: T?) {
             private set
 
         /** 错误状态下提示消息的处理器 */
-        private var failureMessageHandler = FailureMessageHandler.DEFAULT
+        private var failureMessageHandler: FailureMessageHandler = FailureMessageHandler.DEFAULT
 
         /** 从[Context]中初始化 */
         fun init(
