@@ -24,7 +24,7 @@ sealed class UIState<T>(open val value: T?) {
 
     /** 将当前状态转换为加载中状态 */
     fun toLoading(
-        progress: Float = 0f,
+        progress: Float = -1f,
         message: String = loadingMessage
     ): UIState<T> {
         return Loading(progress, message, value)
