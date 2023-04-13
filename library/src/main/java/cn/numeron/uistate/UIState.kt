@@ -10,14 +10,14 @@ sealed class UIState<T>(open val value: T?) {
     }
 
     /** 将当前状态转换为成功状态 */
-    fun toEmpty(message: String = emptyMessage): UIState<T> {
+    fun toEmpty(message: CharSequence = emptyMessage): UIState<T> {
         return Empty(message, value)
     }
 
     /** 将当前状态转换为失败状态 */
     fun toFailure(
         cause: Throwable,
-        message: String = getFailureMessage(cause)
+        message: CharSequence = getFailureMessage(cause)
     ): UIState<T> {
         return Failure(cause, message, value)
     }
@@ -25,7 +25,7 @@ sealed class UIState<T>(open val value: T?) {
     /** 将当前状态转换为加载中状态 */
     fun toLoading(
         progress: Float = -1f,
-        message: String = loadingMessage
+        message: CharSequence = loadingMessage
     ): UIState<T> {
         return Loading(progress, message, value)
     }
@@ -48,11 +48,11 @@ sealed class UIState<T>(open val value: T?) {
     companion object : FailureMessageHandler {
 
         /** 加载状态下的提示消息 */
-        lateinit var loadingMessage: String
+        lateinit var loadingMessage: CharSequence
             private set
 
         /** 空状态下提示消息 */
-        lateinit var emptyMessage: String
+        lateinit var emptyMessage: CharSequence
             private set
 
         /** 错误状态下提示消息的处理器 */
@@ -70,8 +70,8 @@ sealed class UIState<T>(open val value: T?) {
 
         /** 自定义初始化 */
         fun init(
-            emptyMessage: String,
-            loadingMessage: String,
+            emptyMessage: CharSequence,
+            loadingMessage: CharSequence,
             failureMessageHandler: FailureMessageHandler = FailureMessageHandler.DEFAULT
         ) {
             this.emptyMessage = emptyMessage
@@ -79,7 +79,7 @@ sealed class UIState<T>(open val value: T?) {
             this.failureMessageHandler = failureMessageHandler
         }
 
-        override fun getFailureMessage(throwable: Throwable): String {
+        override fun getFailureMessage(throwable: Throwable): CharSequence {
             return failureMessageHandler.getFailureMessage(throwable)
         }
 

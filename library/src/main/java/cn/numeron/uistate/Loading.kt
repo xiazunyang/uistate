@@ -7,7 +7,7 @@ class Loading<T> internal constructor(
     val progress: Float,
 
     /** 消息提示 */
-    val message: String,
+    val message: CharSequence,
 
     value: T?
 

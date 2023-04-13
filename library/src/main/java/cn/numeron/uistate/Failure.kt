@@ -6,7 +6,7 @@ class Failure<T> internal constructor(
     val cause: Throwable,
 
     /** 消息提示 */
-    val message: String,
+    val message: CharSequence,
 
     value: T?
 
