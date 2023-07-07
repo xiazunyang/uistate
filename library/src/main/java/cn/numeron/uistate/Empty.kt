@@ -1,11 +1,11 @@
 package cn.numeron.uistate
 
 
-class Empty<T> internal constructor(
+data class Empty<T> internal constructor(
 
     /** 消息提示 */
     val message: CharSequence,
 
-    value: T?
+    override val value: T?
 
 ) : UIState<T>(value)

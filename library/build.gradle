@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 
 group = 'cn.numeron'
 version = '1.0.3'
 
 android {
-    compileSdkVersion 30
+    compileSdk 30
 
     defaultConfig {
         minSdkVersion 21
@@ -28,5 +28,23 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+
+publishing {
+    publications {
+        jitpack(MavenPublication) {
+            groupId = 'cn.numeron'
+            artifactId = 'uistate'
+            version = '1.0.3'
+            afterEvaluate {
+                from components.release
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 package cn.numeron.uistate
 
 
-class Loading<T> internal constructor(
+data class Loading<T> internal constructor(
 
     /** 下载进度 */
     val progress: Float,
@@ -9,6 +9,6 @@ class Loading<T> internal constructor(
     /** 消息提示 */
     val message: CharSequence,
 
-    value: T?
+    override val value: T?
 
 ) : UIState<T>(value)
