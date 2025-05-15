@@ -19,7 +19,7 @@
   * 添加依赖
     ``` groovy
     dependencies {
-      implementation 'com.github.xiazunyang:uistate:latest_version'
+      implementation 'cn.numeron:uistate:latest_version'
     }
     ```
 
